@@ -1,0 +1,6 @@
+table
+dog
+person
+cat
+tv
+car
