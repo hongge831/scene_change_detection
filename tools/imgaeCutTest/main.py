@@ -6,6 +6,7 @@ import sys,os
 from PIL import Image
 result = []#用于记录所需要的图片块的位置坐标（注意不是像素坐标）
 crop_dic = []#用于记录每一块图片的像素坐标
+totalList = []
 #打印鼠标点击的位置以及做标记
 def location(event, x, y, flags, param):
     if event == cv2.EVENT_LBUTTONDOWN:
@@ -28,26 +29,42 @@ def computeCutCordinate(width,height,num_part):
         for j in range(num_part):
             crop_dic.append((j * h, i * w, j * h + h, i * w + w))
 
-#cv初始设置
-img = cv2.imread("./test.jpg")
-img=cv2.resize(img,(640,640),interpolation=cv2.INTER_CUBIC)
-drawGridLines(640,640)
-cv2.namedWindow("testWindow",cv2.WINDOW_GUI_NORMAL)
-cv2.resizeWindow("testWindow", 640, 640)
-cv2.setMouseCallback('testWindow', location)
+###主函数入口
 computeCutCordinate(640,640,10)
 
-###主函数入口
-while (1):
-    cv2.imshow('testWindow', img)
-    if cv2.waitKey(1)&0xFF == ord('q'):#按q键退出
-        break
+src = "D:/PythonSpace/imgaeCutTest/data/"
+fileList = os.listdir(src)
+s = ""
+for f in fileList:
+    if os.path.exists(src + f + '/1.jpeg'):
+        s = src + f + '/1.jpeg'
+    else:
+        s = src + f + '/1.jpg'
+    print(s)
+    ##########加载图片#############
+    img = cv2.imread(s)
+    img = cv2.resize(img, (640, 640), interpolation=cv2.INTER_CUBIC)
+    drawGridLines(640, 640)
+    cv2.namedWindow("testWindow", cv2.WINDOW_GUI_NORMAL)
+    cv2.resizeWindow("testWindow", 640, 640)
+    cv2.setMouseCallback('testWindow', location)
+    ##########加载结束#############
+    while (1):
+        cv2.imshow('testWindow', img)
+        if cv2.waitKey(1) & 0xFF == ord('q'):  # 按q键退出
+            print('done..')
+            totalList.append(result)
+            result=[]
+            break
 cv2.destroyAllWindows()
 ###获取位置坐标结束
-imgCut = Image.open("./test.jpg")
-#这一步比较容易错，因为之前resize了后面的open图像也要resize
-imgCut = imgCut.resize((640,640))
-for index ,t in enumerate(result):
-    imNew = imgCut.crop(crop_dic[t[0]+t[1]*10])
-    imNew.save('./testNew'+str(index)+'.jpg')
-    print(crop_dic[t[0]+t[1]*10])
+# imgCut = Image.open("./test.jpg")
+# #这一步比较容易错，因为之前resize了后面的open图像也要resize
+# imgCut = imgCut.resize((640,640))
+# for index ,t in enumerate(result):
+#     imNew = imgCut.crop(crop_dic[t[0]+t[1]*10])
+#     imNew.save('./testNew'+str(index)+'.jpg')
+#     print(crop_dic[t[0]+t[1]*10])
+
+
+
