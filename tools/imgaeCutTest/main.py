@@ -45,6 +45,9 @@ while (1):
 cv2.destroyAllWindows()
 ###获取位置坐标结束
 imgCut = Image.open("./test.jpg")
-for t in result:
-    
-    print(crop_dic[t[0]*10+t[1]])
+#这一步比较容易错，因为之前resize了后面的open图像也要resize
+imgCut = imgCut.resize((640,640))
+for index ,t in enumerate(result):
+    imNew = imgCut.crop(crop_dic[t[0]+t[1]*10])
+    imNew.save('./testNew'+str(index)+'.jpg')
+    print(crop_dic[t[0]+t[1]*10])
