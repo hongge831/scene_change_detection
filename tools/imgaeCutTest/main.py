@@ -1,6 +1,7 @@
 #encoding=utf-8
 import cv2
 import numpy as np
+import pickle
 import matplotlib.pyplot as plt
 import sys,os
 from PIL import Image
@@ -11,7 +12,8 @@ totalList = []
 def location(event, x, y, flags, param):
     if event == cv2.EVENT_LBUTTONDOWN:
         cv2.circle(img, (x, y), 10, (0, 0, 255), -1)
-        result.append((x//64,y//64))
+        # result.append((x//64,y//64))
+        result.append(crop_dic[x//64+10*(y//64)])
         print(x//64,y//64)
 
 #画网格函数
@@ -57,7 +59,10 @@ for f in fileList:
             result=[]
             break
 cv2.destroyAllWindows()
-###获取位置坐标结束
+#保存截取的结果列表到本地的totalList.txt文件
+pickle.dump(totalList,open("./totalList.txt","wb"),True)
+
+
 # imgCut = Image.open("./test.jpg")
 # #这一步比较容易错，因为之前resize了后面的open图像也要resize
 # imgCut = imgCut.resize((640,640))
