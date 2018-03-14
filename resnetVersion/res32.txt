@@ -2179,7 +2179,7 @@ layer {
     decay_mult: 0
   }
   param {
-  name:"bn31_e
+  name:"bn31_e"
     lr_mult: 0
     decay_mult: 0
   }
@@ -2305,7 +2305,7 @@ layer {
 	name:"ip1_w"
 	}
 	param{
-	name:"ip1_b'
+	name:"ip1_b"
 	}
 	inner_product_param {
 		num_output: 1000
